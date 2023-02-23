@@ -20,41 +20,41 @@ This project uses many tools like:
 ### Install
 
 ```bash
-pnpm install
+yarn
 ```
 
 Serve with hot reload at <http://localhost:5173>.
 
 ```bash
-pnpm run dev
+yarn run dev
 ```
 
 ### Lint
 
 ```bash
-pnpm run lint
+yarn run lint
 ```
 
 ### Typecheck
 
 ```bash
-pnpm run typecheck
+yarn run typecheck
 ```
 
 ### Build
 
 ```bash
-pnpm run build
+yarn run build
 ```
 
 ### Test
 
 ```bash
-pnpm run test
+yarn run test
 ```
 
 View and interact with your tests via UI.
 
 ```bash
-pnpm run test:ui
+yarn run test:ui
 ```
