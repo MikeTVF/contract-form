@@ -1,7 +1,9 @@
-import { Route, Routes as ReactRoutes } from 'react-router-dom'
+import { Route, Routes as ReactRoutes } from 'react-router-dom';
 
-import ContractForm from 'screens/ContractForm/index'
-import Dashboard from 'screens/Dashboard/index'
+import ContractForm from 'screens/ContractForm/index';
+import Dashboard from 'screens/Dashboard/index';
+
+import { ContractFormStateProvider } from 'context/ContractFormContext';
 
 function Routes() {
   return (
@@ -9,7 +11,7 @@ function Routes() {
       <Route path="/" element={<Dashboard />} />
       <Route path="/contract-form" element={<ContractForm />} />
     </ReactRoutes>
-  )
+  );
 }
 
-export default Routes
+export default Routes;

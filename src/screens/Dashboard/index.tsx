@@ -6,7 +6,7 @@ function Dashboard() {
   return (
     <div>
       <h1>Dashboard</h1>
-      <h2>Contract form</h2>
+      <h2 className='mb-4'>Contract form</h2>
       <Button onClick={() => navigate('/contract-form')}>Add new contract</Button>
     </div>
   );

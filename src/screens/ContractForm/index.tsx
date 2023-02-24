@@ -1,9 +1,19 @@
 import { Button, Label, Textarea, TextInput } from 'flowbite-react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Datepicker from './ContractDatePicker';
+import ServiceTable from './ContractServiceTable';
+import {
+  ContractFormDispatch,
+  ContractFormState,
+  ActionTypes
+} from 'context/ContractFormContext';
+import { useForm, FormProvider, useFormContext } from "react-hook-form";
 
 const ContractForm = () => {
+  // const context = useContext(ContractFormState);
+  // const dispatch = useContext(ContractFormDispatch);
+  const [companyName, setCompanyName] = useState('');
   const navigate = useNavigate();
   const handleChange = (selectedDate: Date) => {
     console.log(selectedDate);
@@ -20,7 +30,18 @@ const ContractForm = () => {
           <div className="mb-2 block">
             <Label htmlFor="companyName" value="Partner name" />
           </div>
-          <TextInput id="companyName" type="text" required={true} />
+          <TextInput
+            id="companyName"
+            // value={context.companyName}
+            // onChange={(e) => {
+            //   dispatch({
+            //     type: ActionTypes.UpdateCompanyName,
+            //     data: e.target.value as string
+            //   });
+            // }}
+            type="text"
+            required={true}
+          />
         </div>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <div>
@@ -44,13 +65,13 @@ const ContractForm = () => {
         </div>
         <div className="">
           <div>
-            <Label htmlFor="services" value="Services" />
+            <Label htmlFor="services" value="Services / Products" />
           </div>
-          <Button size='sm' color='gray'>Add</Button>
+          <ServiceTable />
         </div>
         <div id="textarea">
           <div className="mb-2 block">
-            <Label htmlFor="comment" value="Custom message" />
+            <Label htmlFor="comment" value="Message" />
           </div>
           <Textarea
             id="comment"
