@@ -5,7 +5,7 @@ import ServiceTable from './ContractServiceTable';
 import { useForm, FormProvider } from 'react-hook-form';
 import SelectInput from './SelectInput';
 
-interface Service {
+export interface Service {
   name: string;
   qty: number;
   unitPrice: number;
@@ -35,11 +35,10 @@ const ContractForm = () => {
       createAt: new Date()
     } as FormValues
   });
-  const { register, handleSubmit } = methods;
-
+  const { register, handleSubmit, setValue } = methods;
   const navigate = useNavigate();
   const handleChange = (selectedDate: Date) => {
-    console.log(selectedDate);
+    setValue('createAt',selectedDate);
   };
   return (
     <div>
@@ -62,7 +61,7 @@ const ContractForm = () => {
           <TextInput
             type="text"
             disabled={true}
-            value="Techvify, Ha Noi, Vietnam"
+            value="Ha Noi, Vietnam"
           />
         </div>
         <FormProvider {...methods}>
@@ -100,24 +99,7 @@ const ContractForm = () => {
                 />
               </div>
             </div>
-            <div><SelectInput/></div>
-              {/* <div>
-                <Label htmlFor="city" value="City" />
-                <TextInput
-                  id="city"
-                  type="text"
-                  {...register('city', { required: true })}
-                />
-              </div>
-              <div>
-                <Label htmlFor="province" value="Province" />
-                <TextInput
-                  id="province"
-                  type="text"
-                  {...register('province', { required: true })}
-                />
-              </div> */}
-            
+            <SelectInput />
             <div className="">
               <div>
                 <Label htmlFor="services" value="Services / Products" />

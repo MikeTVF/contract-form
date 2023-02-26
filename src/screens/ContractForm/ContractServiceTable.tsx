@@ -1,5 +1,4 @@
 import { Button, Table, TextInput } from 'flowbite-react';
-import { memo } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 const ContractServiceTable = () => {
@@ -23,8 +22,6 @@ const ContractServiceTable = () => {
     remove(index);
   };
 
-  console.log('table re-render');
-
   return (
     <>
       <Table>
@@ -47,7 +44,9 @@ const ContractServiceTable = () => {
                 <TextInput
                   type="text"
                   required={true}
-                  {...register(`services.${index}.name` as const, {required: true})}
+                  {...register(`services.${index}.name` as const, {
+                    required: true
+                  })}
                 />
               </Table.Cell>
               <Table.Cell className="w-1/5">
@@ -61,9 +60,11 @@ const ContractServiceTable = () => {
               </Table.Cell>
               <Table.Cell className="w-1/5">
                 <TextInput
+                  min={0}
                   type="number"
                   {...register(`services.${index}.unitPrice` as const, {
-                    valueAsNumber: true
+                    valueAsNumber: true,
+                    min: 0
                   })}
                 />
               </Table.Cell>
@@ -98,4 +99,4 @@ const ContractServiceTable = () => {
   );
 };
 
-export default memo(ContractServiceTable);
+export default ContractServiceTable;
