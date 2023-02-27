@@ -10,9 +10,9 @@ function SelectInput() {
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       <div id="country" className="input-wrapper relative">
-        <label htmlFor="country">Country</label>
+        <label className='require-input' htmlFor="country">Country</label>
         <select
-          className="hide-on-pdf z-10"
+          className="hide-on-pdf z-20"
           id="country"
           {...register(`country` as const, { required: true })}
         >
@@ -23,11 +23,12 @@ function SelectInput() {
           ))}
         </select>
         <p className="absolute left-[120px] top-0 z-0">{selectedCountry}</p>
+        <div className="hide-on-pdf absolute left-[120px] top-0 z-0 h-[40px] w-[200px] bg-white"></div>
       </div>
       <div id="state" className="input-wrapper relative">
-        <label htmlFor="state">State</label>
+        <label className='require-input' htmlFor="state">State</label>
         <select
-          className="hide-on-pdf z-10"
+          className="hide-on-pdf z-20"
           id="state"
           {...register(`state` as const, { required: true })}
         >
@@ -42,6 +43,7 @@ function SelectInput() {
           )}
         </select>
         <p className="absolute left-[120px] top-0 z-0">{watch('state')}</p>
+        <div className="hide-on-pdf absolute left-[120px] top-0 z-0 h-[40px] w-[200px] bg-white"></div>
       </div>
     </div>
   );

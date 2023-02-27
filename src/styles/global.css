@@ -43,15 +43,12 @@ body::-webkit-scrollbar-thumb {
 
 label,
 th {
-    @apply font-semibold;
+    @apply font-bold;
 }
 
-/* input {
-    @apply  !border-b !border-0 border-dashed !pb-0 !outline-none;
-} */
 
 .input-wrapper {
-    @apply flex items-center;
+    @apply flex items-baseline;
 }
 
 .input-wrapper label {
@@ -65,7 +62,12 @@ th {
 
 .input-wrapper input,
 td input {
-    @apply  !border-b !border-0 border-dashed !pb-0 !outline-none;
+    @apply !border-b !border-0 border-dashed !pb-0 !outline-none !ring-0;
+}
+
+.require-input::after {
+    content: ' *';
+    color: red;
 }
 
 td,
@@ -75,7 +77,7 @@ th {
 }
 
 td input {
-    @apply w-full !border-b-0
+    @apply w-full !border-b-0 
 }
 
 #date-picker .hide-on-pdf .relative {

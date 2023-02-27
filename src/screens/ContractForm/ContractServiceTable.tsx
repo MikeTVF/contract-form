@@ -121,7 +121,7 @@ const ContractServiceTable = () => {
               />
             </td>
             <td></td>
-            <td className="text-right">${totalPrice.toFixed(2)}</td>
+            <td className="text-right">${Number.isNaN(totalPrice) ? Number(0).toFixed(2) : totalPrice.toFixed(2)}</td>
             <td className="hide-on-pdf"></td>
           </tr>
         </tfoot>

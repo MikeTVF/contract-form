@@ -7,6 +7,7 @@ import SelectInput from './SelectInput';
 import { useRef } from 'react';
 import { jsPDF } from 'jspdf';
 import { Button } from 'flowbite-react';
+import 'fonts/fontFile-normal.js';
 
 export interface ServiceType {
   name: string;
@@ -22,7 +23,9 @@ type FormValues = {
   country: string;
   services: ServiceType[];
   message: string;
-  createAt: Date;
+  createdAt: Date;
+  email: string;
+  phone: string;
 };
 
 const ContractForm = () => {
@@ -36,13 +39,15 @@ const ContractForm = () => {
       country: '',
       services: [{ name: '', qty: 1, unitPrice: 0 }],
       message: '',
-      createAt: new Date()
+      createdAt: new Date(),
+      email: '',
+      phone: ''
     } as FormValues
   });
-  const { register, handleSubmit, setValue, getValues } = methods;
+  const { register, handleSubmit, setValue, getValues, formState } = methods;
   const navigate = useNavigate();
   const handleChange = (selectedDate: Date) => {
-    setValue('createAt', selectedDate);
+    setValue('createdAt', selectedDate);
   };
 
   const handleGeneratePdf = () => {
@@ -56,6 +61,8 @@ const ContractForm = () => {
         scale: 0.47,
         ignoreElements: (e) => e.classList.contains('hide-on-pdf')
       },
+      margin: [30, 0, 30, 0],
+      autoPaging: 'text',
       async callback(doc) {
         doc.save(`Contract - ${getValues('companyName')}`);
       }
@@ -106,10 +113,16 @@ const ContractForm = () => {
               onSubmit={handleSubmit((data) => onClickSubmit(data))}
             >
               <div className="input-wrapper">
-                <label htmlFor="companyName">Partner 2 name</label>
+                <label className="require-input" htmlFor="companyName">
+                  Partner 2 name
+                </label>
                 <input
                   id="companyName"
-                  className="leading-8"
+                  className={`leading-8 ${
+                    formState.errors.companyName
+                      ? 'border-red-500 focus:border-red-500'
+                      : ''
+                  }`}
                   type="text"
                   required={true}
                   {...register('companyName', { required: true })}
@@ -117,10 +130,16 @@ const ContractForm = () => {
               </div>
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                 <div className="input-wrapper">
-                  <label htmlFor="address1">Street Address</label>
+                  <label className="require-input" htmlFor="address1">
+                    Address
+                  </label>
                   <input
                     id="address1"
-                    className="leading-8"
+                    className={`leading-8 ${
+                      formState.errors.address1
+                        ? 'border-red-500 focus:border-red-500'
+                        : ''
+                    }`}
                     type="text"
                     required={true}
                     {...register('address1', { required: true })}
@@ -133,6 +152,46 @@ const ContractForm = () => {
                     className="leading-8"
                     type="text"
                     {...register('address2')}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <div className="input-wrapper">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    id="email"
+                    className={`leading-8 ${
+                      formState.errors.email
+                        ? 'border-red-500 text-red-500 focus:border-red-500'
+                        : ''
+                    }`}
+                    type="email"
+                    {...register('email', {
+                      required: false,
+                      pattern: /^\S+@\S+$/i
+                    })}
+                  />
+                </div>
+                <div className={`input-wrapper`}>
+                  <label className="require-input" htmlFor="phone">
+                    Phone
+                  </label>
+                  <input
+                    id="phone"
+                    className={`leading-8 ${
+                      formState.errors.phone
+                        ? 'border-red-500 text-red-500 focus:border-red-500'
+                        : ''
+                    }`}
+                    type="tel"
+                    minLength={8}
+                    maxLength={10}
+                    {...register('phone', {
+                      required: true,
+                      maxLength: 10,
+                      minLength: 8,
+                      pattern: /^\d+$/i
+                    })}
                   />
                 </div>
               </div>
@@ -156,6 +215,9 @@ const ContractForm = () => {
                   need to be accompanied by a change request form two weeks
                   before each monthly audit.
                 </p>
+                <div className="block">
+                  <label htmlFor="comment">Notes</label>
+                </div>
                 <textarea
                   id="comment"
                   className="w-full"

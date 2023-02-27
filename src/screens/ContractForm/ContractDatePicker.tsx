@@ -12,8 +12,11 @@ function ContractDatePicker({ onChange }: Props) {
   const handleClose = (state: boolean) => {
     setShow(state);
   };
-  const selectedDate: Date = getValues('createAt');
-  const options: Intl.DateTimeFormatOptions = {
+  const pickerOptions = {
+    clearBtn: false,
+  };
+  const selectedDate: Date = getValues('createdAt');
+  const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -25,11 +28,12 @@ function ContractDatePicker({ onChange }: Props) {
         classNames="z-20 hide-on-pdf"
         onChange={onChange}
         show={show}
+        options={pickerOptions}
         setShow={handleClose}
       />
       <span className="absolute top-[-20px] left-[8px] z-0 w-[500px]">{`${selectedDate.toLocaleDateString(
         'en-US',
-        options
+        dateOptions
       )}`}</span>
       <div className="hide-on-pdf absolute top-[-20px] left-[8px] z-0 h-[40px] w-[500px] bg-white"></div>
     </div>
