@@ -1,5 +1,8 @@
-import { Button, Table, TextInput } from 'flowbite-react';
+/* eslint-disable tailwindcss/no-custom-classname */
+// import { Button, Table, TextInput } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import { ServiceType } from './index';
 
 const ContractServiceTable = () => {
   const { register, watch, control } = useFormContext();
@@ -22,53 +25,65 @@ const ContractServiceTable = () => {
     remove(index);
   };
 
+  const totalServices: ServiceType[] = watch('services');
+  const totalQty = totalServices.reduce(
+    (total, service) => service.qty + total,
+    0
+  );
+  const totalPrice = totalServices.reduce(
+    (total, service) => service.qty * service.unitPrice + total,
+    0
+  );
+
   return (
     <>
-      <Table>
-        <Table.Head className="!bg-gray-200">
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Quantity</Table.HeadCell>
-          <Table.HeadCell>Unit Price</Table.HeadCell>
-          <Table.HeadCell>Total</Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Remove</span>
-          </Table.HeadCell>
-        </Table.Head>
-        <Table.Body className="divide-y">
+      <table>
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="text-left">Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th className="text-right">Total</th>
+            <th className="hide-on-pdf">
+              <span className="sr-only">Remove</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
           {fields.map((field, index) => (
-            <Table.Row
-              key={field.id}
-              className="bg-white dark:border-gray-700 dark:bg-gray-800"
-            >
-              <Table.Cell className="w-2/5 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                <TextInput
+            <tr key={field.id}>
+              <td className="w-[50%] whitespace-nowrap text-gray-900 dark:text-white">
+                <input
                   type="text"
+                  className="leading-8"
                   required={true}
                   {...register(`services.${index}.name` as const, {
                     required: true
                   })}
                 />
-              </Table.Cell>
-              <Table.Cell className="w-1/5">
-                <TextInput
+              </td>
+              <td className="w-[10%]">
+                <input
                   type="number"
+                  className="text-center leading-8"
                   min={1}
                   {...register(`services.${index}.qty` as const, {
                     valueAsNumber: true
                   })}
                 />
-              </Table.Cell>
-              <Table.Cell className="w-1/5">
-                <TextInput
-                  min={0}
+              </td>
+              <td className="w-[20%]">
+                <input
                   type="number"
+                  step="0.01"
+                  min={0}
+                  className="text-center leading-8"
                   {...register(`services.${index}.unitPrice` as const, {
-                    valueAsNumber: true,
-                    min: 0
+                    setValueAs: (v) => parseFloat(v)
                   })}
                 />
-              </Table.Cell>
-              <Table.Cell>
+              </td>
+              <td className="w-[20%] text-right">
                 $
                 {Number.isNaN(
                   watch(`services.${index}.unitPrice`) *
@@ -79,20 +94,39 @@ const ContractServiceTable = () => {
                       watch(`services.${index}.unitPrice`) *
                       watch(`services.${index}.qty`)
                     ).toFixed(2)}
-              </Table.Cell>
-              <Table.Cell>
+              </td>
+              <td className="hide-on-pdf">
                 <span
-                  className="cursor-pointer font-medium text-red-500 hover:underline"
+                  className="cursor-pointer text-red-500 hover:underline"
                   onClick={() => removeRow(index)}
                 >
                   Remove
                 </span>
-              </Table.Cell>
-            </Table.Row>
+              </td>
+            </tr>
           ))}
-        </Table.Body>
-      </Table>
-      <Button className="my-4" onClick={addRow}>
+        </tbody>
+        <tfoot>
+          <tr className="bg-gray-100 font-bold">
+            <td className="whitespace-nowrap text-gray-900 dark:text-white">
+              Total
+            </td>
+            <td>
+              {/* {totalQty} */}
+              <input
+                className="bg-transparent text-center"
+                type="number"
+                value={totalQty}
+                disabled
+              />
+            </td>
+            <td></td>
+            <td className="text-right">${totalPrice.toFixed(2)}</td>
+            <td className="hide-on-pdf"></td>
+          </tr>
+        </tfoot>
+      </table>
+      <Button className="hide-on-pdf my-4" onClick={addRow}>
         Add Row
       </Button>
     </>

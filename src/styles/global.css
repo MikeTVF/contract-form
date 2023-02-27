@@ -40,3 +40,44 @@ body::-webkit-scrollbar-thumb {
     background-color: darkgrey;
     outline: 1px solid slategrey;
 }
+
+label,
+th {
+    @apply font-semibold;
+}
+
+/* input {
+    @apply  !border-b !border-0 border-dashed !pb-0 !outline-none;
+} */
+
+.input-wrapper {
+    @apply flex items-center;
+}
+
+.input-wrapper label {
+    @apply w-1/4
+}
+
+.input-wrapper input,
+.input-wrapper select {
+    @apply w-3/4
+}
+
+.input-wrapper input,
+td input {
+    @apply  !border-b !border-0 border-dashed !pb-0 !outline-none;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+td input {
+    @apply w-full !border-b-0
+}
+
+#date-picker .hide-on-pdf .relative {
+    z-index: 99;
+}

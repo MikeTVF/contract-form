@@ -1,45 +1,47 @@
-import { Label, Select } from 'flowbite-react';
+/* eslint-disable tailwindcss/no-custom-classname */
 import { useFormContext } from 'react-hook-form';
-import data from 'data/provincesVietnam.json';
+import data from 'data/countries_and_states.json';
 
 function SelectInput() {
   const { register, watch } = useFormContext();
-  const selectedProvince = watch('province');
-  const cityList = data.filter((p) => p.name === selectedProvince)[0]
-    ?.districts;
+  const selectedCountry = watch('country');
+  const cityList = data.filter((p) => p.name === selectedCountry)[0]?.states;
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-      <div id="province">
-        <div className="mb-2 block">
-          <Label htmlFor="province" value="Province" />
-        </div>
-        <Select
-          id="province"
-          {...register(`province` as const, { required: true })}
+      <div id="country" className="input-wrapper relative">
+        <label htmlFor="country">Country</label>
+        <select
+          className="hide-on-pdf z-10"
+          id="country"
+          {...register(`country` as const, { required: true })}
         >
           {data.map((c) => (
             <option key={c.name} value={c.name}>
               {c.name}
             </option>
           ))}
-        </Select>
+        </select>
+        <p className="absolute left-[120px] top-0 z-0">{selectedCountry}</p>
       </div>
-      <div id="city">
-        <div className="mb-2 block">
-          <Label htmlFor="city" value="City/Districts" />
-        </div>
-        <Select id="city" {...register(`city` as const, { required: true })}>
-          {selectedProvince ? (
+      <div id="state" className="input-wrapper relative">
+        <label htmlFor="state">State</label>
+        <select
+          className="hide-on-pdf z-10"
+          id="state"
+          {...register(`state` as const, { required: true })}
+        >
+          {selectedCountry ? (
             cityList.map((c) => (
               <option key={c.name} value={c.name}>
                 {c.name}
               </option>
             ))
           ) : (
-            <option disabled>Select province first</option>
+            <option disabled>Select country first</option>
           )}
-        </Select>
+        </select>
+        <p className="absolute left-[120px] top-0 z-0">{watch('state')}</p>
       </div>
     </div>
   );
