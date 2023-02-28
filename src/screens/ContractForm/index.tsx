@@ -7,7 +7,6 @@ import SelectInput from './SelectInput';
 import { useRef } from 'react';
 import { jsPDF } from 'jspdf';
 import { Button } from 'flowbite-react';
-import 'fonts/fontFile-normal.js';
 
 export interface ServiceType {
   name: string;
@@ -92,7 +91,7 @@ const ContractForm = () => {
               className="border-0 leading-8"
               type="text"
               disabled={true}
-              value="Techvify"
+              value="Techvify Software"
             />
           </div>
           <div className="input-wrapper">
@@ -202,10 +201,8 @@ const ContractForm = () => {
                 </div>
                 <ServiceTable />
               </div>
-              <div id="textarea">
-                <div className="block">
-                  <label htmlFor="comment">Terms of Agreement</label>
-                </div>
+              <div className="block">
+                <label htmlFor="comment">Terms of Agreement</label>
                 <p>
                   State the terms that will guide and conduct this partnership
                   agreement <br />
@@ -215,6 +212,8 @@ const ContractForm = () => {
                   need to be accompanied by a change request form two weeks
                   before each monthly audit.
                 </p>
+              </div>
+              <div id="textarea">
                 <div className="block">
                   <label htmlFor="comment">Notes</label>
                 </div>
@@ -222,7 +221,7 @@ const ContractForm = () => {
                   id="comment"
                   className="w-full"
                   placeholder="Leave a comment..."
-                  {...register('message', { required: true })}
+                  {...register('message')}
                   rows={4}
                 />
               </div>

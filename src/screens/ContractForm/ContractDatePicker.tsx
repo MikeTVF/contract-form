@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import Datepicker from 'tailwind-datepicker-react';
 
@@ -13,7 +13,7 @@ function ContractDatePicker({ onChange }: Props) {
     setShow(state);
   };
   const pickerOptions = {
-    clearBtn: false,
+    clearBtn: false
   };
   const selectedDate: Date = getValues('createdAt');
   const dateOptions: Intl.DateTimeFormatOptions = {

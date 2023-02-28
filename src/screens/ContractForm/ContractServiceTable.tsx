@@ -1,5 +1,4 @@
 /* eslint-disable tailwindcss/no-custom-classname */
-// import { Button, Table, TextInput } from 'flowbite-react';
 import { Button } from 'flowbite-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { ServiceType } from './index';
