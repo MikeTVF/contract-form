@@ -3,8 +3,6 @@ import { Route, Routes as ReactRoutes } from 'react-router-dom';
 import ContractForm from 'screens/ContractForm/index';
 import Dashboard from 'screens/Dashboard/index';
 
-import { ContractFormStateProvider } from 'context/ContractFormContext';
-
 function Routes() {
   return (
     <ReactRoutes>

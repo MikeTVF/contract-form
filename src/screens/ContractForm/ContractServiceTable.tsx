@@ -1,113 +1,135 @@
-import { ContractFormDispatch, ContractFormState } from 'context/ContractFormContext';
-import { Button, Table, TextInput } from 'flowbite-react';
-import { useState, memo, useContext } from 'react';
+/* eslint-disable tailwindcss/no-custom-classname */
+import { Button } from 'flowbite-react';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { ServiceType } from './index';
 
 const ContractServiceTable = () => {
-    const {services} = useContext(ContractFormState);
-    const dispatch = useContext(ContractFormDispatch);
-  const [rows, setRows] = useState([
-    {
-      name: '',
-      qty: 1,
-      unitPrice: 0,
-      total: 0
-    }
-  ]);
+  const { register, watch, control } = useFormContext();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'services'
+  });
 
-  const addRow = () => {
-    setRows([
-      ...rows,
-      {
-        name: '',
-        qty: 1,
-        unitPrice: 0,
-        total: 0
-      }
-    ]);
+  const service = {
+    name: '',
+    qty: 1,
+    unitPrice: 0
   };
 
-  console.log('first')
+  const addRow = () => {
+    append(service);
+  };
+
+  const removeRow = (index: number) => {
+    remove(index);
+  };
+
+  const totalServices: ServiceType[] = watch('services');
+  const totalQty = totalServices.reduce(
+    (total, service) => service.qty + total,
+    0
+  );
+  const totalPrice = totalServices.reduce(
+    (total, service) => service.qty * service.unitPrice + total,
+    0
+  );
 
   return (
     <>
-      <Table>
-        <Table.Head className="!bg-gray-200">
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Quantity</Table.HeadCell>
-          <Table.HeadCell>Unit Price</Table.HeadCell>
-          <Table.HeadCell>Total</Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Remove</span>
-          </Table.HeadCell>
-        </Table.Head>
-        <Table.Body className="divide-y">
-          {rows.map((row, index) => (
-            <Table.Row
-              key={index}
-              className="bg-white dark:border-gray-700 dark:bg-gray-800"
-            >
-              <Table.Cell className="w-2/5 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                <TextInput
+      <table>
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="text-left">Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th className="text-right">Total</th>
+            <th className="hide-on-pdf">
+              <span className="sr-only">Remove</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {fields.map((field, index) => (
+            <tr key={field.id}>
+              <td className="w-[50%] whitespace-nowrap text-gray-900 dark:text-white">
+                <input
                   type="text"
-                  value={row.name}
-                  onChange={(event) => {
-                    const newRows = [...rows];
-                    newRows[index].name = event.target.value;
-                    setRows(newRows);
-                  }}
+                  className="leading-8"
+                  required={true}
+                  {...register(`services.${index}.name` as const, {
+                    required: true
+                  })}
                 />
-              </Table.Cell>
-              <Table.Cell className="w-1/5">
-                <TextInput
+              </td>
+              <td className="w-[10%]">
+                <input
                   type="number"
+                  className="text-center leading-8"
                   min={1}
-                  value={row.qty}
-                  onChange={(event) => {
-                    const newRows = [...rows];
-                    newRows[index].qty =
-                      parseInt(event.target.value) >= 1
-                        ? parseInt(event.target.value)
-                        : 1 || 1;
-                    newRows[index].total =
-                      newRows[index].qty * newRows[index].unitPrice || 0;
-                    setRows(newRows);
-                  }}
+                  {...register(`services.${index}.qty` as const, {
+                    valueAsNumber: true
+                  })}
                 />
-              </Table.Cell>
-              <Table.Cell className="w-1/5">
-                <TextInput
+              </td>
+              <td className="w-[20%]">
+                <input
                   type="number"
-                  value={row.unitPrice}
-                  onChange={(event) => {
-                    const newRows = [...rows];
-                    newRows[index].unitPrice =
-                      parseFloat(event.target.value) >= 0
-                        ? parseFloat(event.target.value)
-                        : 0 || 0;
-                    newRows[index].total =
-                      newRows[index].qty * newRows[index].unitPrice || 0;
-                    setRows(newRows);
-                  }}
+                  step="0.01"
+                  min={0}
+                  className="text-center leading-8"
+                  {...register(`services.${index}.unitPrice` as const, {
+                    setValueAs: (v) => parseFloat(v)
+                  })}
                 />
-              </Table.Cell>
-              <Table.Cell>${(row.qty * row.unitPrice).toFixed(2)}</Table.Cell>
-              <Table.Cell>
-        <span
-          className="cursor-pointer font-medium text-red-500 hover:underline"
-        //   onClick={() => {}}
-        >
-          Remove
-        </span>
-      </Table.Cell>
-            </Table.Row>
+              </td>
+              <td className="w-[20%] text-right">
+                $
+                {Number.isNaN(
+                  watch(`services.${index}.unitPrice`) *
+                    watch(`services.${index}.qty`)
+                )
+                  ? Number(0).toFixed(2)
+                  : (
+                      watch(`services.${index}.unitPrice`) *
+                      watch(`services.${index}.qty`)
+                    ).toFixed(2)}
+              </td>
+              <td className="hide-on-pdf">
+                <span
+                  className="cursor-pointer text-red-500 hover:underline"
+                  onClick={() => removeRow(index)}
+                >
+                  Remove
+                </span>
+              </td>
+            </tr>
           ))}
-        </Table.Body>
-      </Table>
-      <Button className="my-4" onClick={addRow}>
+        </tbody>
+        <tfoot>
+          <tr className="bg-gray-100 font-bold">
+            <td className="whitespace-nowrap text-gray-900 dark:text-white">
+              Total
+            </td>
+            <td>
+              {/* {totalQty} */}
+              <input
+                className="bg-transparent text-center"
+                type="number"
+                value={totalQty}
+                disabled
+              />
+            </td>
+            <td></td>
+            <td className="text-right">${Number.isNaN(totalPrice) ? Number(0).toFixed(2) : totalPrice.toFixed(2)}</td>
+            <td className="hide-on-pdf"></td>
+          </tr>
+        </tfoot>
+      </table>
+      <Button className="hide-on-pdf my-4" onClick={addRow}>
         Add Row
       </Button>
     </>
   );
 };
 
-export default memo(ContractServiceTable);
+export default ContractServiceTable;
